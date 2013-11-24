@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">STUTreasure</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="user_hint">請輸入您的學號，如：s12345678</string>
+    <string name="description">大學的學習方式與高中職大不同，自主學習與善用資源是決定您未來價值的關鍵方法！在美麗的樹德校園中，有好多資源能幫助您快樂學習，更有許多寶藏能幫助您創造多彩多姿的大學生活。現在，就立刻起身，依謎題指示進行「校園尋寶大發現」，把這些資源和寶統統挖出來，相信您的大學生活一定精彩萬分，與眾不同！</string>
+    <string name="dialog_title">請稍等</string>
+    <string name="dialog_body">資料載入中</string>
+    <string name="welcome">Welcome to Treasure and Shu-Te University ! \n Login to start your journey !</string>
+    <string name="welcome_hey">H \t e \t y \t ! \t =D </string>
+    <string name="the_description">T  h  e\nD e s c r i p t i o n </string>
+    <string name="the_portal">T h e \t P o r t a l</string>
+    <string name="portal_help">To Start the Game, or to visit websites</string>
+    <string name="task_thegame">T h e \t G a m e</string>
+    <string name="task_help">Complete the task below by finding the target location</string>
+    <string name="info_des">D e p a r t u r e s</string>
+    
+
+</resources>
