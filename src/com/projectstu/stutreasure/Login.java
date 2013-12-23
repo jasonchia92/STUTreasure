@@ -33,19 +33,25 @@ import com.projectstu.intentintegrator.IntentIntegrator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +70,7 @@ public class Login extends Activity {
 	//呼叫sharedpreferences
 	SessionManager session;
 	SessionCookie sessionc;
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +82,7 @@ public class Login extends Activity {
 		txtUsername = (EditText) findViewById(R.id.txtUsername);
 		txtPassword = (EditText) findViewById(R.id.txtPassword); 
 
-		Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+//		Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
 		findView();
 		check_zxing();
@@ -85,7 +92,24 @@ public class Login extends Activity {
 		tv2.setTypeface(tf);
 		TextView tv = (TextView) findViewById(R.id.welcome_text);
 		tv.setTypeface(tf);
+		
+		ImageView logo = (ImageView)findViewById(R.id.main_logo);
+		Resources res = getResources();;
+		Time mTime = new Time(); 
+		mTime.setToNow();
+		int hour = mTime.hour;
+		if(hour>=6&hour<=11){
+			logo.setBackgroundDrawable(res.getDrawable(R.drawable.login_logo_morning));
 
+		}
+		else if(hour>=12&hour<=19){
+			logo.setBackgroundDrawable(res.getDrawable(R.drawable.login_logo_afternoon));
+
+		}
+		else{
+			logo.setBackgroundDrawable(res.getDrawable(R.drawable.login_logo_night));	
+		}
+		
 
 		CookieSyncManager.createInstance(this);
 		loginButtonEvent();
@@ -111,7 +135,6 @@ public class Login extends Activity {
 		btnLogin.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-
 				// Get username, password from EditText
 				String username = txtUsername.getText().toString();
 				String password = txtPassword.getText().toString();
@@ -175,6 +198,15 @@ public class Login extends Activity {
 		JSONArray jsonArray = new JSONArray("[" + data + "]");
 		JSONObject jsonObject = jsonArray.getJSONObject(0);
 		status = (String)jsonObject.getString("msg");
+		
+		//判斷登入狀態之後,以msg作為識別
+				if (status.contains("fail")){
+					msg.what=0;
+				}
+				else{
+					msg.what=1;
+				}
+				handler.sendMessage(msg);
 
 		//從伺服器獲取使用者編號,名稱,系別與入學年分
 		JSONObject menu = jsonObject.getJSONObject("data");
@@ -183,14 +215,7 @@ public class Login extends Activity {
 		dep = (String)menu.getString("dep");
 		year = (String)menu.getString("year");
 
-		//判斷登入狀態之後,以msg作為識別
-		if (data.contains("fail")){
-			msg.what=0;
-		}
-		else{
-			msg.what=1;
-		}
-		handler.sendMessage(msg);
+		
 
 	}
 
@@ -217,9 +242,29 @@ public class Login extends Activity {
 			super.handleMessage(msg);
 		}
 	};
+	final Context context = this;
 
 	//登入成功dialog
 	private void dialog() {
+		final Dialog dialog = new Dialog(context);
+		//tell the Dialog to use the dialog.xml as it's layout description
+//		dialog.setContentView(R.layout.dialog);
+//		dialog.setTitle("繼續");
+//		TextView txt = (TextView) dialog.findViewById(R.id.txt);
+//		txt.setText("確認您的資訊 \n學號："+uid+"\n姓名："+name+"\n系別："+dep+"\n入學年度："+year+"\n"+"\n提醒：抽獎活動資格僅有完成活動之102學年度新生！");
+//		Button dialogButton = (Button) dialog.findViewById(R.id.dialogButton);
+//		dialogButton.setOnClickListener(new OnClickListener() {
+//			public void onClick(View v) {
+//				Bundle bundle=new Bundle();
+//				bundle.putString("data", response);
+//				Intent i = new Intent(getApplicationContext(), Description.class);
+//				i.putExtras(bundle);
+//				startActivity(i);
+//				dialog.dismiss();
+//			}
+//		});
+//
+//		dialog.show();
 		new AlertDialog.Builder(Login.this).setTitle("繼續")
 		//顯示使用者資訊
 		.setMessage("確認您的資訊 \n學號："+uid+"\n姓名："+name+"\n系別："+dep+"\n入學年度："+year+"\n"+"\n提醒：抽獎活動資格僅有完成活動之102學年度新生！")

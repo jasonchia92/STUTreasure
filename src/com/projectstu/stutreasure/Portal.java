@@ -1,5 +1,6 @@
 package com.projectstu.stutreasure;
 
+
 import com.projectstu.connect.AlertDialogManager;
 import com.projectstu.connect.SessionManager;
 import android.app.Activity;
@@ -8,14 +9,18 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Portal extends Activity {
+public class Portal extends Activity implements AnimationListener {
 	// Alert Dialog Manager
 	AlertDialogManager alert = new AlertDialogManager();
+	Animation animBlink;
 
 	//從sharedpreferences獲取使用者資訊
 	// Session Manager Class
@@ -54,6 +59,16 @@ public class Portal extends Activity {
 		general=(Button)findViewById(R.id.btnGeneral);
 		academic=(Button)findViewById(R.id.btnAcademic);
 		enter=(Button)findViewById(R.id.btnStart);
+		
+		// load the animation
+				animBlink = AnimationUtils.loadAnimation(getApplicationContext(),
+						R.anim.blink);
+				
+				// set animation listener
+				animBlink.setAnimationListener(this);
+				enter.setVisibility(View.VISIBLE);
+				enter.startAnimation(animBlink);
+
 	}
 
 	private void setListeners(){
@@ -141,6 +156,24 @@ public class Portal extends Activity {
 		back.putExtras(bundle);
 		startActivity(back);
 		finish();
+	}
+
+	@Override
+	public void onAnimationEnd(Animation arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAnimationStart(Animation animation) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
